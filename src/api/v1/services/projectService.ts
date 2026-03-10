@@ -28,57 +28,61 @@ const projects: Project[] = [
   },
 ];
 
-// Get all projects
-export const getAllProjects = (): Project[] => {
+export const getAllProjects = async (): Promise<Project[]> => {
   return projects;
 };
 
-// Get project by ID
-export const getProjectById = (id: number): Project | null => {
-  const project = projects.find((project) => project.id === id);
-  return project ?? null;
+export const getProjectById = async (id: number): Promise<Project | undefined> => {
+  for (let i = 0; i < projects.length; i++) {
+    if (projects[i].id === id) {
+      return projects[i];
+    }
+  }
+  return undefined;
 };
 
-let nextId = 5;
+export const createProject = async (name: string, status: string): Promise<Project> => {
+  let nextId: number;
 
-// CREATE 
-export const createProject = (
-  name: string,
-  status: string
-): Project => {
-  const newProject: Project = {
-    id: nextId++,
-    name,
-    status,
+  if (projects.length === 0) {
+    nextId = 1;
+  } else {
+    let lastProject = projects[projects.length - 1];
+    nextId = lastProject.id + 1;
+  }
+  let newProject: Project = {
+    id: nextId,
+    name: name,
+    status: status,
     createdAt: new Date().toISOString(),
   };
-
   projects.push(newProject);
   return newProject;
 };
 
-// UPDATE
-export const updateProject = (
+export const updateProject = async (
   id: number,
-  updatedProject: Partial<Project>
-): Project | null => {
-  const index = projects.findIndex((project) => project.id === id);
-
-  if (index === -1) {
-    return null;
+  name: string,
+  status: string,
+): Promise<Project | undefined> => {
+  for (let i = 0; i < projects.length; i++) {
+    if (projects[i].id === id) {
+      projects[i].name = name;
+      projects[i].status = status;
+      return projects[i];
+    }
   }
-
-  projects[index] = {
-    ...projects[index],
-    ...updatedProject,
-  };
-
-  return projects[index];
+  return undefined;
 };
 
-// DELETE
-export const deleteProject = (id: number): boolean => {
-  const index = projects.findIndex((project) => project.id === id);
+export const deleteProject = async (id: number): Promise<boolean> => {
+  let index = -1;
+  for (let i = 0; i < projects.length; i++) {
+    if (projects[i].id === id) {
+      index = i;
+      break;
+    }
+  }
 
   if (index === -1) {
     return false;
