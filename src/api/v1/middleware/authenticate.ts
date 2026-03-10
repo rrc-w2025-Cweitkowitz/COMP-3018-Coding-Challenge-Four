@@ -32,14 +32,14 @@ const authenticate = async (
         const token: string | undefined = authHeader?.startsWith("Bearer ")
             ? authHeader.split(" ")[1]
             : undefined;
-
+        console.log("%%%%%%%%%%%%%%%%%%%%%%")
         if (!token) {
             throw new AuthenticationError(
                 "Unauthorized: No token provided",
                 "TOKEN_NOT_FOUND"
             );
         }
-
+        console.log("%%%%%%%%%%%%%%%%%%%%%%")
         const decodedToken: DecodedIdToken = await auth.verifyIdToken(
             token
         );
@@ -67,5 +67,5 @@ const authenticate = async (
         }
     }
 };
-
+        console.log("%%%%%%%%%%%%%%%%%%%%%%")
 export default authenticate;
