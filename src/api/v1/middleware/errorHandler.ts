@@ -28,7 +28,7 @@ const errorHandler = (
     if (!err) {
         console.error("Error: null or undefined error received");
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(
-            errorResponse("An unexpected error occurred", "UNKNOWN_ERROR")
+            errorResponse("Unauthorized: No token provided", "TOKEN_NOT_FOUND")
         );
         return;
     }
@@ -47,7 +47,7 @@ const errorHandler = (
     } else {
         // Handle unexpected errors (programming errors, third-party library errors, etc.)
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json(
-            errorResponse("An unexpected error occurred", "UNKNOWN_ERROR")
+            errorResponse("Unauthorized: No token provided", "TOKEN_NOT_FOUND")
         );
     }
 };
